@@ -1,134 +1,115 @@
 import './App.css'
-import Header from './components/Header'
-import Editor from './components/Editor'
-import List from './components/List'
-import ListItem from './components/ListItem'
+import { createContext, useContext,  useReducer } from 'react'
 
-import { useRef, useReducer, useCallback } from 'react'
-// useRef : id값 처리 목적
 
-// 목 데이터는 전역으로 처리한다
-const mockTodo = [
-  //isDone : 체크박스 확인. false는 unchecked.
-  { id : 0, isDone : false, content : "체크박스 클릭하여 완료표시", date:new Date().getTime()},
-  { id : 1, isDone : false, content : "삭제버튼 클릭하여 할일삭제", date:new Date().getTime()},
-  { id : 2, isDone : false, content : "자유롭게 할 일 작성!!!!!!!", date:new Date().getTime()}
+const CarContext = createContext();
+
+const PRODUCTS = [
+  {id:0, name:"커피",    price:4500},
+  {id:1, name:"샌드위치", price:6000},
+  {id:2, name:"커피",    price:2500}
 ]
 
-//유즈리듀서로 보낼 것
-const reducer = (todo, action)=>{
-  switch(action.type) { //원래 내용 + 변경된 내용은 스위치로 분기
-    case "CREATE" : return [action.newItem, ...todo];
-    case "UPDATE" : return todo.map   ((item)=>item.id === action.targetId ? {...item, isDone:!item.isDone} : item);
-    case "DELETE" : return todo.filter((item)=>item.id !== action.targetId);
-    default : return todo;
+//리듀서
+function cartReducer(state, action) {
+  switch(action.type){
+    case "ADD_ITEM" : { 
+      const existing = state.items.find((item)=>item.id === action.payload.id);
+      if (existing){
+        return { items: state.items.map((item)=>item.id === action.payload.id ? {...item, qty:item.qty+1} : item)}
+      }
+      //새상품
+      return {items : [...state.items, {...action.payload, qty: 1}]}
+    };
+    case "REMOVE_ITEM": return { items: state.items.filter((item)=> item.id !== action.payload.id) };
+    case "CLEAR_CART" : return { items: [] };
+    default : return state;
   }
 }
 
+//커스텀훅(사용자훅) -유즈카트
+function useCart(){
+  const context = useContext(CarContext);
+  if(!context){
+    throw new Error('useCart는 CartProvider 컴포넌트 안에서만 사용 가능')
+  }
+  return context;
+}
 
-// const reducer = (todo, action) => {
-//   switch (action.type) { //원래 내용 + 변경된 내용은 스위치로 분기
-//     case "CREATE": { return [action.newItem, ...todo]; }
-//     case "UPDATE": { return todo.map((item) => item.id === action.targetId ? { ...item, isDone:!item.isDone } : item);}
-//     case "DELETE": { return todo.filter((item) => item.id !== action.targetId);}
-//     default: return todo; 
-//       // map 함수 내부에서 삼항 연산의 결과물이 정상 반환되도록 return을 추가합니다.
-//       // filter 함수 블록 내부에 return 키워드를 명시하여 논리 연산 장벽을 유지합니다.
-//   }
-// };
+function CartProvider({children}){
+  const [state, dispatch] = useReducer(cartReducer, {items:[]});
+  const addItem = (product) => dispatch({type:"ADD_ITEM",    payload : product});
+  const removeItem = (id)   => dispatch({type:"REMOVE_ITEM", payload : {id}   });
+  const clearCart = ()      => dispatch({type:"CLEAR_CART"});
+
+  const totalPrice = state.items.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const totalCount = state.items.reduce((sum, item) => sum + item.qty, 0);
+
+  const value = {state, addItem, removeItem, clearCart, totalPrice, totalCount}
+  return <CarContext.Provider value={value}> {children} </CarContext.Provider>;
+}
 
 
-function App() {
-  //App기능1 : 목업DB를 유저스테이트로 가져옴.
-  // const [todo, setTodo] = useState(mockTodo);
-
-  //App기능1 : 유저리듀서 활용
-  const [todo, disPatch] = useReducer(reducer, mockTodo);
-  const idRef = useRef(3); //목업데이터 이후부터 ID카운트
-  
-  
-  //App기능2 : 작성, 수정, 삭제 호출기 작성.
-  //리듀서로 보낼 내용 onCreate, onUpdate, onDelete
-  const onCreate = (content) =>{
-    // disPatch({}); //호출 결과값으로 state가 들어옴
-    disPatch({
-      type:"CREATE",
-      newItem:{
-          id : idRef.current, //아이디값 증감은 리듀스에서 처리.
-          isDone : false, 
-          content : content, 
-          date:new Date().getTime()
-      } //액션객체
-    }); //호출 결과값으로 state가 들어옴
-    idRef.current +=1; //디스패치 내에서 쓰면 안됨.
-  };
-
-  //내부에 작성된 함수를 재생성하지않도록 메모하는 훅
-  const onUpdate = useCallback((targetId)=>{
-    disPatch({
-      type:"UPDATE",
-      targetId //액션객체
-    });
-  },[])
-
-  // //리듀스 소스
-  // const onUpdate = (targetId)=>{
-  //   disPatch({
-  //     type:"UPDATE",
-  //     targetId //액션객체
-  //   });
-  // };
-
-  //내부에 작성된 함수를 재생성하지않도록 메모하는 훅
-  const onDelete = useCallback((targetId)=>{
-    disPatch({
-      type:"DELETE",
-      targetId //액션객체
-    });
-  },[])
-
-  // //리듀스 소스
-  // const onDelete = (targetId)=>{
-  //   disPatch({
-  //     type:"DELETE",
-  //     targetId //액션객체
-  //   });
-  // };
-
-  // const onCreate = (content)=>{
-  //   const newItem ={
-  //       id : idRef.current++, 
-  //       isDone : false, 
-  //       content : content, 
-  //       date:new Date().getTime()
-  //   };
-  //   setTodo([newItem, ...todo]); //이 단계의 todo는 mockTodo 배열임.
-  // };
-  // const onUpdate = (targetId)=>{
-  //   setTodo(todo.map((item) => { //수정이 일어나는건 체크박스 체크여부임
-  //     if(item.id == targetId) {
-  //       return {...item, isDone:!item.isDone} //타겟아이디를 전체아이디랑 비교해가지고 isDone를 체인지.
-  //     }
-  //     else {return item;}
-  //   }
-  //     ));
-  // };
-  // const onDelete = (targetId)=>{
-  //   setTodo(todo.filter((item) => item.id !== targetId));
-  // };
-
+function Header(){
+  //장바구니 상품 개수
+  const {totalCount} = useCart();
   return (
-    <>
-      <div className='App'>
-          <Header />
-          <Editor onCreate={onCreate}/>
-          <List todo={todo} onUpdate={onUpdate} onDelete={onDelete}> 
-            <ListItem />
-          </List>
-
-      </div>
-    </>
+    <header>
+      <h3>장바구니 : {totalCount} 개</h3>
+    </header>
   )
 }
 
-export default App
+function ProductList(){
+  //Context로부터 (추가할 아이템) 데이터 제공받아서
+  const {addItem} = useCart();
+  return (
+    <div>
+      <h3>상품 목록</h3>
+      {/* 상품배열.map */}
+      {PRODUCTS.map((product)=>
+            <div key={product.id}>
+              {product.name} - {product.price.toLocaleString()}원
+              <button onClick={()=>addItem(product)}> 담기 </button>
+            </div>)
+       }
+    </div>
+  )
+}
+
+function CartSummary(){
+  //장바구니 상품 갯수
+  const {state, removeItem, clearCart, totalPrice, totalCount} = useCart();
+  return (
+    <div>
+      <h4>장바구니 : {totalCount} 개</h4>
+      {state.items.length === 0 && <p>장바구니가 비어있습니다.</p>}
+      {/* map */}
+      {state.items.map((item)=>(
+        <div key={item.id}>
+          {item.name} × {item.qty}
+          <button onClick={()=>removeItem(item.id)}>삭제</button>
+        </div>
+      ))}
+      <p>
+        <h4>총 금액 : {totalPrice.toLocaleString()}원</h4>
+        <button onClick={clearCart}>전체 비우기</button>
+      </p>
+      <div></div>
+    </div>
+  )
+}
+
+function App() {
+  return (
+    <div>
+      <CartProvider>
+        <Header />
+        <ProductList />
+        <CartSummary />
+      </CartProvider>
+    </div>
+  )
+}
+
+export default App;

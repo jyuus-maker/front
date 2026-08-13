@@ -1,7 +1,10 @@
 import "../css/ListItem.css";
 import { memo } from "react"
+import { useContext } from "react";
+import { TodoDispatchContext } from "../App";
 
-function ListItem({id, isDone, content, date, onUpdate, onDelete}){
+function ListItem({id, isDone, content, date}){
+    const {onUpdate, onDelete} = useContext(TodoDispatchContext);
     const onChangeCheck = ()=> {
         onUpdate(id);
     }

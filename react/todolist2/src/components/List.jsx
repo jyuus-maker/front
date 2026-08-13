@@ -1,10 +1,13 @@
 import "../css/List.css";
 import ListItem from "./ListItem";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useContext } from "react";
 import { memo } from "react"
+import { TodoStateContext } from "../App";
 
-function List({todo, onUpdate, onDelete}){
+function List(){
     const [search, setSearch] = useState("");
+    const todo = useContext(TodoStateContext);
+
     const onChangeSearch = (e)=>{ setSearch(e.target.value); };
     const getSearchResult = ()=>{
         return search === "" ? todo : //서치가 공란이면 투두 그대로 반환
@@ -42,11 +45,7 @@ function List({todo, onUpdate, onDelete}){
                 {
                     [...getSearchResult()].map(
                         (item) => {
-                            return <ListItem
-                                        key={item.id}{...item}
-                                        onUpdate={onUpdate}
-                                        onDelete={onDelete}
-                                    />
+                            return <ListItem key={item.id}{...item} />
                         }
                     )
                 }
