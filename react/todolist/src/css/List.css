@@ -1,0 +1,47 @@
+.List {
+    width: 100%;
+    max-width: 520px; /* 전체 부모 너비 */
+    box-sizing: border-box; /* 패딩이 전체 너비에 포함되도록 설정 */
+}
+
+.List input.searchbar {
+  /* 1. 크기 및 기본 구조 설정 */
+  min-width: 100%;
+  box-sizing: border-box;
+  height: 36px;
+  padding: 0 16px;
+  margin-bottom: 20px;
+  border: none;
+  border-bottom: solid 1px #ccc;
+  outline: none;
+  cursor: pointer;
+
+  /* 3. 맑은 에메랄드 민트 파스텔 배경 및 텍스트 */
+  background-color: #fff;
+  /* color: #a8e6cf;
+  font-size: 24px; */
+  font-weight: 300; /* '+' 기호가 너무 두껍지 않고 부드럽게 보임 */
+
+  /* 4. 중앙 정렬 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* 5. 뽀용하고 부드러운 아래쪽 민트빛 그림자 */
+  /* box-shadow: 0 8px 16px -4px rgba(226, 226, 226, 0.6); */
+
+  /* 6. 클릭/호버 애니메이션 */
+  transition: all 0.2s ease;
+}
+
+/* 호버 및 클릭 효과 */
+.List input.searchbar:hover {
+  border-color: solid 5px #93dec3;
+  /* box-shadow: 0 10px 20px -4px rgba(214, 214, 214, 0.8); */
+  transform: translateY(-1px);
+}
+
+.List input.searchbar:active {
+  transform: translateY(1px);
+  /* box-shadow: 0 4px 10px -2px rgba(180, 180, 180, 0.5); */
+}

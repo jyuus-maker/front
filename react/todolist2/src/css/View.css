@@ -1,0 +1,42 @@
+button {
+  /* 1. 크기 및 기본 구조 설정 */
+  min-width: 70px;
+  height: 48px;
+  padding: 0 16px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  /* 2. 완벽한 알약 형태(Pill shape) */
+  border-radius: 9999px;
+
+  /* 3. 맑은 에메랄드 민트 파스텔 배경 및 텍스트 */
+  background-color: #a8e6cf;
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 300; /* '+' 기호가 너무 두껍지 않고 부드럽게 보임 */
+
+  /* 4. 중앙 정렬 */
+  display: inline-flex;
+  margin-right: 20px;
+  align-items: center;
+  justify-content: center;
+
+  /* 5. 뽀용하고 부드러운 아래쪽 민트빛 그림자 */
+  box-shadow: 0 8px 16px -4px rgba(168, 230, 207, 0.6);
+
+  /* 6. 클릭/호버 애니메이션 */
+  transition: all 0.2s ease;
+}
+
+/* 호버 및 클릭 효과 */
+button:hover {
+  background-color: #93dec3;
+  box-shadow: 0 10px 20px -4px rgba(168, 230, 207, 0.8);
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 10px -2px rgba(168, 230, 207, 0.5);
+}

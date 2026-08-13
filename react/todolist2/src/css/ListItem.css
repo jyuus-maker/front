@@ -1,0 +1,81 @@
+.ListItem {
+    box-shadow: 0 4px 8px -4px rgba(147, 197, 253, 0.3);
+    padding: 5px 15px;
+    margin-bottom: 5px;
+    border-radius: 15px;
+    border: solid 1px #eee;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.ListItem ._colPad {
+    padding: 5px 0;
+}
+
+.ListItem .checkbox_col {
+    width:20px;
+}
+
+.ListItem .title_col {
+    flex: 1;          /* 남은 여백을 모두 흡수 */
+    min-width: 0;
+}
+
+.ListItem .data_col {
+    font-size: 0.7em;
+    color:#666;
+}
+
+
+
+/* ✨ JS 없이 체크박스가 체크되었을 때 부모(.ListItem) 스타일링 ✨ */
+.ListItem:has(input[type="checkbox"]:checked) {
+  /* 맑게 뽀용한 소다 파스텔 배경 (원하는 색상으로 변경 가능) */
+  background-color: #f0f9ff; 
+  border-color: #bae6fd;
+  box-shadow: 0 6px 16px -2px rgba(186, 230, 253, 0.45);
+}
+
+/* 체크되었을 때 제목 텍스트 (취소선 + 연한 그레이) */
+.ListItem:has(input[type="checkbox"]:checked) .title_col {
+  text-decoration: line-through;
+  color: #94a3b8;
+  opacity: 0.8;
+}
+
+
+
+.ListItem .btn_col button {
+  /* 1. 크기 및 기본 구조 설정 */
+  min-width: 30px;
+  padding: 3px 16px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  /* 2. 완벽한 알약 형태(Pill shape) */
+  border-radius: 9999px;
+
+  /* 3. 맑은 에메랄드 민트 파스텔 배경 및 텍스트 */
+  background-color: #a8e6cf;
+  color: #ffffff;
+  font-weight: 300; /* '+' 기호가 너무 두껍지 않고 부드럽게 보임 */
+
+  /* 4. 중앙 정렬 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* 6. 클릭/호버 애니메이션 */
+  transition: all 0.2s ease;
+}
+
+/* 호버 및 클릭 효과 */
+.btn_col button:hover {
+  background-color: #93dec3;
+  transform: translateY(-1px);
+}
+
+.btn_col button:active {
+  transform: translateY(1px);
+}
