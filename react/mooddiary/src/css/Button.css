@@ -1,0 +1,101 @@
+button {
+  /* 1. 크기 및 기본 구조 설정 */
+  min-width: 100px;
+  height: 48px;
+  padding: 0 16px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  /* 2. 완벽한 알약 형태(Pill shape) */
+  border-radius: 9999px;
+
+  /* 3. 배경 및 버튼 텍스트 */
+  background-color: #d6d6d6; 
+  box-shadow: 0 4px 10px -2px rgba(214, 214, 214, 0.5);
+  color: #ffffff;
+  text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+  font-size: 20px;
+  font-weight: 300; /* '+' 기호가 너무 두껍지 않고 부드럽게 보임 */
+
+  /* 4. 중앙 정렬 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* 6. 클릭/호버 애니메이션 */
+  transition: all 0.2s ease;
+}
+
+/* 기본호버&액티브 */
+button:hover {
+  background-color: #c7c7c7;
+  box-shadow: 0 10px 20px -4px rgba(214, 214, 214, 0.8);
+  transform: translateY(-1px);
+}
+button:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 10px -2px rgba(214, 214, 214, 0.5);
+}
+
+
+/* 포지티브 버튼 */
+.btn_POSITIVE { 
+    background-color: #a8e6cf; 
+    box-shadow: 0 8px 16px -4px rgba(168, 230, 207, 0.5);}
+    .btn_POSITIVE:hover {
+      background-color: #93dec3;
+      box-shadow: 0 10px 20px -4px rgba(168, 230, 207, 0.8);
+      transform: translateY(-1px);
+    }
+    .btn_POSITIVE:active {
+      transform: translateY(1px);
+      box-shadow: 0 4px 10px -2px rgba(168, 230, 207, 0.5);
+    }
+    
+/* 네거티브 버튼 */
+.btn_NEGATIVE { 
+  background-color: #ffb7b2; 
+  box-shadow: 0 4px 10px -2px rgba(255, 183, 178, 0.5);}
+  .btn_NEGATIVE:hover {
+    background-color: #ffa09b;
+    box-shadow: 0 10px 20px -4px rgba(255, 183, 178, 0.8);
+    transform: translateY(-1px);
+  }
+  .btn_NEGATIVE:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 10px -2px rgba(255, 183, 178, 0.5);
+  }
+  
+/* 그레이 버튼 ---- 기본형 버튼임*
+.btn_GRAY {
+  background-color: #d6d6d6; 
+  box-shadow: 0 4px 10px -2px rgba(214, 214, 214, 0.5);
+}
+.btn_GRAY:hover { 
+  background-color: #c7c7c7;
+  box-shadow: 0 10px 20px -4px rgba(214, 214, 214, 0.8);
+  transform: translateY(-1px);
+}
+.btn_GRAY:active { 
+  transform: translateY(1px);
+  box-shadow: 0 4px 10px -2px rgba(168, 230, 207, 0.5);
+} */
+      
+      
+/* 기타 버튼 */
+.bt_CIRCLE {
+  /* 원형버튼 */
+  width: 48px;
+  min-width: unset;
+  padding: 0;
+}
+
+.bt_LIST {
+  /* 리스트용 버튼 */
+  height: 36px;
+  font-size: 16px;
+  color: #3f3f3f;
+  text-shadow: unset;
+}
+

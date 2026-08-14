@@ -1,0 +1,52 @@
+/* @font-face {
+    /* 웹폰트 적용방법 *
+    font-family: 'ChangwonDangamRounded';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2511-1@1.0/ChangwonDangamRound-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-display: swap;
+} */
+@font-face {
+    /* 폰트 임베드 시 적용방법 -주소는 정확해야 함 */
+    font-family: 'ChangwonDangamRounded';
+    src: url("/public/ChangwonDangamRound.ttf");
+}
+
+html, body {
+    margin: 0; 
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    height: 100%;
+    background: #F4F8FB;
+}
+
+body * { 
+    font-family: 'ChangwonDangamRounded'; 
+    padding: 5px 10px; 
+}
+
+/* 플렉스 정렬이 필요한 경우 */
+.FLEX {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.FLEX > * {
+  /* 찌그러짐 방지 */
+  flex-shrink: 0;
+}
+
+#root {
+    background-color: white;
+    max-width:720px;
+    width:100%;
+    margin: 40px auto;
+    padding: 20px 30px;
+    box-sizing:border-box;
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: 0 8px 16px -4px rgba(147, 197, 253, 0.3);
+}
