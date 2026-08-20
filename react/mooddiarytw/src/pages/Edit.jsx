@@ -17,8 +17,8 @@ function Edit() {
   const onClickDelete = ()=>{
     const result = window.confirm("일기를 정말 삭제할까요? 복구할 수 없습니다.")
     if(result) {
-      onDelete(id);
       navigate("/", {replace : true});
+      onDelete(id);
     }
   }
   const onSubmit = (data)=>{

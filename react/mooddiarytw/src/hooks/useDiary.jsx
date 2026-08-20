@@ -1,24 +1,21 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { DiaryStateContext } from '../App';
 import { useNavigate } from "react-router";
 
 const useDiary = (id) => {
-    //리액트 훅----------------------------
     const data = useContext(DiaryStateContext);
-    const [diary, setDiary] = useState();
     const navigate = useNavigate();
     
-    useEffect(()=>{
-        const matchDiary = data.find((item)=> String(item.id) === String(id));
-        if(matchDiary){
-            setDiary(matchDiary);
-        }else{
+    const matchDiary = data.find((item) => String(item.id) === String(id));
+
+    useEffect(() => {
+        if (data.length > 0 && !matchDiary) {
             alert("일기가 존재하지 않습니다.");
-            navigate("/", {replace:true});
+            navigate("/", { replace: true });
         }
-    },[id, data]);
+    }, [id, data, matchDiary, navigate]);
     
-    return diary;
+    return matchDiary;
 }
 
-export default useDiary
+export default useDiary;
