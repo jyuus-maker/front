@@ -1,0 +1,18 @@
+import '../css/Header.css'
+// import { Routes, Route } from "react-router";
+
+function Header({leftChild, title, rightChild}) {
+  return (
+    <div className='Header'>
+      <div className='header_left'>
+        {leftChild}
+      </div>
+      <div className='header_title'>{title}</div>
+      <div className='header_right'>
+        {rightChild}
+      </div>
+    </div>
+  )
+}
+
+export default Header

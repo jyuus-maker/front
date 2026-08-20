@@ -1,0 +1,40 @@
+.Editor > .editor_section {
+  margin-bottom: 40px;
+}
+
+.Editor > .editor_section > h4 {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.Editor > .editor_section > input,
+textarea {
+  background-color: rgb(236, 236, 236);
+  border: none;
+  border-radius: 10px;
+  font-size: 20px;
+  padding: 10px 20px;
+}
+
+.Editor > .editor_selection > .input_wrapper textarea {
+  padding: 20px;
+  width: 100%;
+  min-height: 200px;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.Editor > .editor_selection > button {
+  margin: 0 10px;
+}
+
+.Editor .emotion_list_wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 1%;
+}
+
+/* .Editor .button_section {
+  display: flex;
+  justify-content: space-between;
+} */
