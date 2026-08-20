@@ -2,9 +2,9 @@ import './App.css'
 import "./css/Button.css"
 import "./css/Header.css"
 
-import Header from './components/Header'
+// import Header from './components/Header'
 import Home from './pages/Home'
-import DiaryList from './components/DiaryList'
+// import DiaryList from './components/DiaryList'
 import New from './pages/New'
 import Edit from './pages/Edit'
 import Diary from './pages/Diary'
@@ -12,16 +12,45 @@ import Notfound from './pages/Notfound'
 
 // import { useParams } from 'react-router'
 import { Routes, Route } from "react-router";
-import { useReducer, useRef, useState, useContext, createContext } from 'react'
+import { useReducer, useRef, useState, createContext, useEffect } from 'react'
 
+// // 목 데이터는 전역으로 처리한다-----로컬스토리지 작업 후 활용 완료-----------
+// const mockData = [
+//   //isDone : 체크박스 확인. false는 unchecked.
+//   { id:0, date:new Date(2026, 8-1, 2).getTime(), emotionId:1, content:"나의 감정을 선택해보세요."},
+//   { id:1, date:new Date(2026, 8-1, 6).getTime(), emotionId:2, content:"하루의 기분을 적어보세요."},
+//   { id:2, date:new Date(2026, 8-1, 8).getTime(), emotionId:4, content:"자유롭게 일기를 써봐요!!!"}
+// ]
 
-//리듀서(기능 모음집)----------------
+// //리듀서(기능 모음집)----------------
+// const reducer = (state, action)=> {
+//   //state = 원본data
+//   switch(action.type){
+//     case "INIT"   : return action.data;
+//     case "CREATE" : return [action.data, ...state];
+//     case "UPDATE" : return state.map   ((item)=>Number(item.id) === Number(action.data.id) ? action.data : item);
+//     case "DELETE" : return state.filter((item)=>Number(item.id) !== Number(action.id)); //강제로 스트링형변환 String() 상태로 비교.
+//     default : return state; //받은거 그대로 돌려주란 뜻
+//   }
+// }
+
+//리듀서(기능 모음집) : 로컬스토리지 적용버전----------------
 const reducer = (state, action)=> {
   //state = 원본data
   switch(action.type){
-    case "CREATE" : return [action.data, ...state];
-    case "UPDATE" : return state.map   ((item)=>String(item.id) === String(action.data.id) ? action.data : item);
-    case "DELETE" : return state.filter((item)=>String(item.id) !== String(action.id)); //강제로 스트링형변환 String() 상태로 비교.
+    //스위치문에서 const 변수를 중복으로 써야 하는 경우, {}로 막아서 오류를 방지.
+    case "INIT"   : return action.data;
+    case "CREATE" : {const newState = [action.data, ...state];
+                    localStorage.setItem("diary", JSON.stringify(newState));
+                    return newState;}
+    case "UPDATE" : {const newState = state.map((item)=>
+                        Number(item.id) === Number(action.data.id) ? action.data : item);
+                    localStorage.setItem("diary", JSON.stringify(newState));
+                    return newState;}
+    case "DELETE" : {const newState = state.filter((item)=>
+                        Number(item.id) !== Number(action.id)); //강제로 스트링형변환 String() 상태로 비교.
+                    localStorage.setItem("diary", JSON.stringify(newState));
+                    return newState;}
     default : return state; //받은거 그대로 돌려주란 뜻
   }
 }
@@ -30,27 +59,43 @@ const reducer = (state, action)=> {
 const DiaryStateContext = createContext();
 const DiaryDispatchContext = createContext();
 
-// 목 데이터는 전역으로 처리한다----------------
-const mockData = [
-  //isDone : 체크박스 확인. false는 unchecked.
-  { id : 0, date:new Date().getTime(), emotionId : 5, content : "나의 감정을 선택해보세요."},
-  { id : 1, date:new Date().getTime(), emotionId : 2, content : "하루의 기분을 적어보세요."},
-  { id : 2, date:new Date().getTime(), emotionId : 3, content : "자유롭게 일기를 써봐요!!"}
-]
-
 function App() {
   //리액트 훅 활용----------------
-  const [data, dispatch] = useReducer(useReducer, mockData); //목데이터가 없으면 대신 []를 넣어줌.
-  const idRef = useRef(3); //목데이터 다음 번호를 부여
+  const [isDataLoaded, setDataLoaded] = useState(false);
+  const [data, dispatch] = useReducer(reducer, []); //목데이터를 안만들었다면 [](빈 배열)을 넣어줌.
+  const idRef = useRef(0); //목데이터 다음 번호를 부여
+
+  useEffect(()=>{
+    const rawData = localStorage.getItem("diary"); //로컬스토리지의 다이어리 데이터를 읽어온다.
+    //로컬스토리지가 비어있을 경우
+    if(!rawData){
+        setDataLoaded(true);
+        return;
+      }
+    const localData = JSON.parse(rawData); //로컬데이터가 비어있지 않다면 데이터를 파싱함
+    if(localData.length===0) { //가져온 로컬데이터 배열이 0이라면 데이터가 없는 것으로 취급..(당연??)
+        setDataLoaded(true);
+        return;
+    } 
+
+    localData.sort((a, b)=> Number(b.id) - Number(a.id));
+    idRef.current = localData[0].id + 1;
+
+    dispatch({
+      type: "INIT",
+      data:localData
+    });
+    setDataLoaded(true);
+  }, [])
 
 
   //기능 펑션----------------
-  const onCreate = (createDate, emotionId, content)=> { //데이터추가
+  const onCreate = (date, emotionId, content)=> { //데이터추가
     dispatch({
       type:"CREATE",
       data:{
         id : idRef.current, //아이디값 증감은 리듀스에서 처리.
-        createDate,
+        date,
         emotionId, 
         content
       }
@@ -58,12 +103,12 @@ function App() {
     idRef.current +=1;
     //디스패치 내에서 id : idRef.current++,와 같이 쓰면 리듀서에서 적용이 안되기 때문에 디스패치 밖으로 뺌
   }
-  const onUpdate = (id, createDate, emotionId, content)=> { //데이터 수정(스테이트 처리)
+  const onUpdate = (id, date, emotionId, content)=> { //데이터 수정(스테이트 처리)
     dispatch({
       type:"UPDATE",
       data:{
         id,
-        createDate,
+        date,
         emotionId, 
         content
       }
@@ -76,39 +121,26 @@ function App() {
     });
   }
 
-  return (
-    <div className='Home'>
-      <DiaryStateContext.Provider value={data}>
-        <DiaryDispatchContext.Provider value={{onCreate, onUpdate, onDelete}}>
-          <Routes> {/* 끝에 -s가 붙어야 함 */}
-            <Route path="/" element={<Home />} />
-            <Route path="/new" element={<New />} />
-            <Route path="/edit/:id" element={<Edit />} />
-            <Route path="/diary" element={<Diary />} />
-            <Route path="*" element={<Notfound />} />
-          </Routes>
-          <DiaryList />
-          <div className='FLEX'>
-            <button className='btn_POSITIVE'>버튼</button>
-            <button className='btn_NEGATIVE'>버튼</button>
-            <button className=''>버튼</button>
-            <button className='btn_POSITIVE bt_LIST'>수정하기</button>
-            <button className='btn_NEGATIVE bt_LIST'>수정하기</button>
-            <button className='bt_LIST'>수정하기</button>
-          </div>
-          <div className='FLEX'>
-            <button className='btn_POSITIVE bt_CIRCLE'>◀&nbsp;</button>
-            <button className='btn_POSITIVE bt_CIRCLE'>&nbsp;▶</button>
-            <button className='btn_NEGATIVE bt_CIRCLE'>◀&nbsp;</button>
-            <button className='btn_NEGATIVE bt_CIRCLE'>&nbsp;▶</button>
-            <button className='bt_CIRCLE'>◀&nbsp;</button>
-            <button className='bt_CIRCLE'>&nbsp;▶</button>
-          </div>
-        </DiaryDispatchContext.Provider>
-      </DiaryStateContext.Provider>
+  if(!isDataLoaded) {
+    return <div>데이터를 불러오는 중입니다.</div>
+  }else{
+    return (
+      <div className='App'>
+        <DiaryStateContext.Provider value={data}>
+          <DiaryDispatchContext.Provider value={{onCreate, onUpdate, onDelete}}>
+            <Routes> {/* 끝에 -s가 붙어야 함 */}
+              <Route path="/" element={<Home />} />
+              <Route path="/new" element={<New />} />
+              <Route path="/diary/:id" element={<Diary />} />
+              <Route path="/edit/:id" element={<Edit />} />
+              <Route path="*" element={<Notfound />} />
+            </Routes>
+          </DiaryDispatchContext.Provider>
+        </DiaryStateContext.Provider>
 
-    </div>
-  )
+      </div>
+    )
+  }
 }
 
 export default App;

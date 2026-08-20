@@ -5,11 +5,11 @@ function Header({leftChild, title, rightChild}) {
   return (
     <div className='Header'>
       <div className='header_left'>
-        <button>{leftChild}</button>
+        {leftChild}
       </div>
       <div className='header_title'>{title}</div>
       <div className='header_right'>
-        <button>{rightChild}</button>
+        {rightChild}
       </div>
     </div>
   )

@@ -1,6 +1,6 @@
 button {
   /* 1. 크기 및 기본 구조 설정 */
-  min-width: 100px;
+  min-width: 110px;
   height: 48px;
   padding: 0 16px;
   border: none;
@@ -15,7 +15,7 @@ button {
   box-shadow: 0 4px 10px -2px rgba(214, 214, 214, 0.5);
   color: #ffffff;
   text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 300; /* '+' 기호가 너무 두껍지 않고 부드럽게 보임 */
 
   /* 4. 중앙 정렬 */
@@ -89,6 +89,8 @@ button:active {
   width: 48px;
   min-width: unset;
   padding: 0;
+  font-size: 1.8em;
+  /* color: #3f3f3f; */
 }
 
 .bt_LIST {

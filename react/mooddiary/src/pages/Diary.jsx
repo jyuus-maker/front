@@ -1,16 +1,33 @@
 import '../css/Diary.css'
 import Header from '../components/Header'
 import Button from '../components/Button'
-// import { Routes, Route } from "react-router";
+import Viewer from '../components/Viewer'
+import { getFormattedDate } from '../util/getFormattedDate.js'
+import { useParams, useNavigate } from "react-router"
+// import { useEffect } from "react"
+import useDiary from '../hooks/useDiary'
 
 function Diary() {
+  const { id } = useParams(); // URL 파라미터에서 id 추출
+  const data = useDiary(id);
+  const navigate = useNavigate();
+  
+  if (!data) {
+    return <div>로딩중입니다...</div>;
+  }
+
+  const {date, emotionId, content} = data;
+  const title = `${getFormattedDate(new Date(date))} 기록`;
+  
   return (
     <div className='Diary'>
-      <Header title={"다이어리 리스트"}
-        leftChild={ <Button type="POSITIVE" text={"긍정btn"} onClick={()=>{alert("POSITIVE Button");}} /> }
-        rightChild={<Button type="NEGATIVE" text={"부정btn"} onClick={()=>{alert("NEGATIVE Button");}} />}
+      <Header title={title}
+        leftChild={ <Button text={"< 홈으로"} onClick={() => navigate("/")}/> }
+        rightChild={ <Button text={"수정하기"}  onClick={() => navigate(`/edit/${id}`)}/> }
       />
-      <h1>Diary Page</h1>
+      <div className='viewer_selection'>
+        <Viewer emotionId={emotionId} content={content} />
+      </div>
     </div>
   )
 }
