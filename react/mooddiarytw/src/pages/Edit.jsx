@@ -1,4 +1,3 @@
-import '../css/Edit.css'
 import Header from '../components/Header'
 import Button from '../components/Button'
 import Editor from './Editor';

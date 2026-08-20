@@ -1,4 +1,3 @@
-import '../css/DiaryList.css'
 import Button from './Button'
 import DiaryItem from './DiaryItem'
 import { useState } from 'react'
@@ -35,16 +34,16 @@ function DiaryList({data}) {
 
   return (
     <div className='DiaryList'>
-      <div className='menu_wrapper FLEX'>
+      <div className='menu_wrapper flex p-0 m-0 mt-[10px] justify-between items-center gap-[20px]'>
         <div className='left_col'>
-          <select value={sortType} onChange={onChangeSortType}>
+          <select className='w-[100px] text-[16px] py-[10px] px-[15px] bg-[rgb(236,236,236)] border-none rounded-[10px] outline-none cursor-pointer' value={sortType} onChange={onChangeSortType}>
             {sortOptionList.map((item, idx)=>
               <option key={idx} value={item.value}> {item.name} </option>
             )}
           </select>
         </div>
-        <div className='right_col'>
-          <Button type='POSITIVE' text={"새 일기 쓰기"} onClick={onClickNew} className='bt_LIST'/>
+        <div className='right_col flex-1'>
+          <Button type='POSITIVE' text={"새 일기 쓰기"} onClick={onClickNew} className='bt_LIST w-full'/>
         </div>
       </div>
       <div className='list_wrapper'>

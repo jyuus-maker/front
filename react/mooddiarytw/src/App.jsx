@@ -1,6 +1,3 @@
-import './App.css'
-import "./css/Button.css"
-import "./css/Header.css"
 
 // import Header from './components/Header'
 import Home from './pages/Home'
@@ -125,7 +122,7 @@ function App() {
     return <div>데이터를 불러오는 중입니다.</div>
   }else{
     return (
-      <div className='App'>
+      <div className='App px-[20px] py-0'>
         <DiaryStateContext.Provider value={data}>
           <DiaryDispatchContext.Provider value={{onCreate, onUpdate, onDelete}}>
             <Routes> {/* 끝에 -s가 붙어야 함 */}

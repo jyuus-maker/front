@@ -1,4 +1,3 @@
-import '../css/Home.css'
 import Header from '../components/Header'
 import Button from '../components/Button'
 import DiaryList from '../components/DiaryList'
@@ -37,8 +36,8 @@ function Home() {
   return (
     <div className='Home'>
       <Header title={headerTitle} 
-        leftChild ={<Button type="" className='bt_CIRCLE' text={"<"} onClick={onDecreaseMonth} />}
-        rightChild={<Button type="" className='bt_CIRCLE' text={">"} onClick={onIncreaseMonth} />}
+        leftChild ={<Button type="CIRCLE" text={"<"} onClick={onDecreaseMonth} />}
+        rightChild={<Button type="CIRCLE" text={">"} onClick={onIncreaseMonth} />}
       />
       <DiaryList data={filteredData} />
     </div>

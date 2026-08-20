@@ -1,9 +1,0 @@
-.App {
-    padding: 0px 20px;
-}
-
-.App > div > a { 
-    /* Link는 최종적으로 a로 변환됨 */
-    display: inline-block;
-    margin: 5px 15px;
-}

@@ -1,4 +1,3 @@
-import '../css/Diary.css'
 import Header from '../components/Header'
 import Button from '../components/Button'
 import Viewer from '../components/Viewer'
